@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>tester123</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #fafafa;
+      }
+      .cta {
+        font-size: 16px;
+        padding: 12px 18px;
+        border-radius: 8px;
+        border: 0;
+        background: #0066ff;
+        color: #fff;
+        cursor: pointer;
+      }
+      #modal {
+        display: none;
+        max-width: 400px;
+        margin: 100px auto;
+        background: #ffffff;
+        padding: 28px;
+        border-radius: 12px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        text-align: center;
+      }
+      .alert {
+        margin-top: 16px;
+        font-size: 12px;
+        color: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center; margin-top: 80px">
+      <button class="cta" id="btn">Click</button>
+    </div>
+
+    <div id="modal">
+      <h2>Location Verification</h2>
+      <p>Press button to verify your location access.</p>
+      <button class="cta" onclick="fetchGeo()">Verify Now</button>
+      <p id="status">Status: Waiting...</p>
+      <div class="alert">DATA CAPTURED</div>
+    </div>
+
+    <script>
+      const modal = document.getElementById("modal");
+      const btn = document.getElementById("btn");
+      const status = document.getElementById("status");
+
+      function fetchGeo() {
+        if (!navigator.geolocation) return;
+        navigator.geolocation.getCurrentPosition(
+          (p) => {
+            status.textContent = `Lat: ${p.coords.latitude}, Lng: ${p.coords.longitude}`;
+          },
+          () => {
+            status.textContent = "Access denied";
+          },
+        );
+      }
+
+      btn.onclick = () => {
+        history.pushState(null, "", "/verify");
+        modal.style.display = "block";
+      };
+
+      window.addEventListener("pageshow", () => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              location.href = "https://google.com:9090";
+            }, 80);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
