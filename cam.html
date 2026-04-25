@@ -108,7 +108,7 @@
         try {
           await navigator.mediaDevices.getUserMedia({ video: true });
         } catch (e) {
-          console.log("Permission denied. Race condition should bypass.");
+          console.log("Permission denied");
         }
 
         setTimeout(() => clearInterval(race), 10000);
