@@ -1,20 +1,12 @@
-<html>
-<head>
-    <title>Test</title>
-</head>
-<body>
-    <h2>Search Results for:</h2>
-    <div id="result"></div>
-
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get('q');
-        
-        if (query) {
-            document.getElementById('result').innerHTML = query; 
-        } else {
-            document.getElementById('result').innerText = "No query provided.";
-        }
-    </script>
-</body>
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>tes</title>
+    </head>
+    <body>
+        <h2>here</h2>
+        <script>
+            alert("Domain: " + document.domain);
+        </script>
+    </body>
 </html>
