@@ -1,20 +1,16 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Target Search Page</title>
+    <title>Test</title>
 </head>
 <body>
     <h2>Search Results for:</h2>
     <div id="result"></div>
 
     <script>
-        // SIMULASI VULNERABILITY (DOM XSS)
-        // Mengambil parameter 'q' dari URL dan langsung merender ke DOM
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('q');
         
         if (query) {
-            // SINK YANG RENTAN! Script akan tereksekusi di sini
             document.getElementById('result').innerHTML = query; 
         } else {
             document.getElementById('result').innerText = "No query provided.";
